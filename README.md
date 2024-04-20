@@ -18,6 +18,11 @@ Ensure Python and the necessary libraries are installed:
 ```
 pip install openai speechrecognition torch
 ```
+
+Go to https://platform.openai.com/assistants to set up your assistant to get
+-assistant id
+-thread id
+
 ## Usage
 Set Up Your Microphone: Ensure your microphone is set up and configured as the default recording device.
 Run the Script: Start the script using the command:
