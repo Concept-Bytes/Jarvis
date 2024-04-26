@@ -1,3 +1,4 @@
+dotenv
 pyaudio
 SpeechRecognition
 --extra-index-url https://download.pytorch.org/whl/cu116
