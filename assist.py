@@ -11,7 +11,7 @@ tts_enabled = True
 load_dotenv()  # Load environment variables from .env file
 
 # Initialize the client with environment variables
-client = OpenAI()
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 mixer.init()
 
 # Retrieve the assistant using environment variable
