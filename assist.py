@@ -1,5 +1,6 @@
 from openai import OpenAI
 import time
+from dotenv import load_dotenv
 from pathlib import Path
 from pygame import mixer  # Load the popular external library
 import time
@@ -7,14 +8,18 @@ import os
 
 tts_enabled = True
 
-# Initialize the client
-client = OpenAI()
+load_dotenv()  # Load environment variables from .env file
+
+# Initialize the client with environment variables
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 mixer.init()
-# Retrieve the assistant
-assistant = client.beta.assistants.retrieve("Insert_your_assistant_ID_here")
-#create empty thread
-jarvis_thread = "Insert_your_thread_id_here"
-thread = client.beta.threads.retrieve(jarvis_thread)
+
+# Retrieve the assistant using environment variable
+assistant = client.beta.assistants.retrieve(os.getenv('ASSISTANT_ID'))
+
+# Create and retrieve the thread using environment variable
+plant_thread = os.getenv('CHAT_THREAD_ID')
+thread = client.beta.threads.retrieve(plant_thread)
 
 # Function to ask a question to the assistant
 def ask_question_standard(question):
