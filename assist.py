@@ -11,15 +11,15 @@ tts_enabled = True
 load_dotenv()  # Load environment variables from .env file
 
 # Initialize the client with environment variables
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+client = OpenAI()
 mixer.init()
 
 # Retrieve the assistant using environment variable
 assistant = client.beta.assistants.retrieve(os.getenv('ASSISTANT_ID'))
 
 # Create and retrieve the thread using environment variable
-plant_thread = os.getenv('CHAT_THREAD_ID')
-thread = client.beta.threads.retrieve(plant_thread)
+jarvis_thread = os.getenv('CHAT_THREAD_ID')
+thread = client.beta.threads.retrieve(jarvis_thread)
 
 # Function to ask a question to the assistant
 def ask_question_standard(question):
