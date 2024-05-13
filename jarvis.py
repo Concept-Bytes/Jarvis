@@ -20,12 +20,12 @@ def main():
     data_queue = Queue()
     # We use SpeechRecognizer to record our audio because it has a nice feature where it can detect when speech ends.
     recorder = sr.Recognizer()
-    recorder.energy_threshold = 1000
+    recorder.energy_threshold = 2000
     # Definitely do this, dynamic energy compensation lowers the energy threshold dramatically to a point where the SpeechRecognizer never stops recording.
     recorder.dynamic_energy_threshold = False
     
     #set the mic source
-    source = sr.Microphone(sample_rate=16000, device_index=0)
+    source = sr.Microphone(sample_rate=16000, device_index=1)
 
     audio_model = whisper.load_model("tiny.en")
     print("Model loaded.\n")

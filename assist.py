@@ -1,18 +1,18 @@
 from openai import OpenAI
 import time
 from pathlib import Path
-from pygame import mixer  # Load the popular external library
+from pygame import mixer
 import time
 import os
 from dotenv import load_dotenv, find_dotenv
 
 # Load .env file
-_ = load_dotenv(find_dotenv())
+load_dotenv()
 
 # Access the API key
 OpenAI.api_key = os.getenv("OPENAI_API_KEY")
-assistant_id = os.getenv("ASSISTANT_ID")
-thread_id = os.getenv('THREAD_ID')
+openai_assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
+openai_thread_id = os.getenv("OPENAI_THREAD_ID")
 
 tts_enabled = True
 
@@ -20,9 +20,9 @@ tts_enabled = True
 client = OpenAI()
 mixer.init()
 # Retrieve the assistant
-assistant = client.beta.assistants.retrieve(assistant_id)
+assistant = client.beta.assistants.retrieve(openai_assistant_id)
 #create empty thread
-jarvis_thread = thread_id
+jarvis_thread = openai_thread_id
 thread = client.beta.threads.retrieve(jarvis_thread)
 
 # Function to ask a question to the assistant
