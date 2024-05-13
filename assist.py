@@ -1,27 +1,26 @@
 from openai import OpenAI
 import time
 from pathlib import Path
-from pygame import mixer  # Load the popular external library
+from pygame import mixer
 import time
 import os
+from dotenv import load_dotenv, find_dotenv
+
+# Load .env file
+load_dotenv()
+
+# Access the API key
+OpenAI.api_key = os.getenv("OPENAI_API_KEY")
 
 tts_enabled = True
 
 # Initialize the client
 client = OpenAI()
 mixer.init()
-# Retrieve the assistant
-assistant = client.beta.assistants.retrieve("Insert_your_assistant_ID_here")
-#create empty thread
-jarvis_thread = "Insert_your_thread_id_here"
-thread = client.beta.threads.retrieve(jarvis_thread)
 
-# Function to ask a question to the assistant
-def ask_question_standard(question):
-    #this is an example of how you can feed in context
-    #Hint LLMs won't know the time or date unless you tell them
-    date_and_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-    context = """
+# Create the assistant
+date_and_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+context = """
     You are an assistant named Jarvis like from the ironman movies. 
     You are to act like him and provide help as best you can.  
     Be funny and witty. Keep it brief and serious. 
@@ -31,17 +30,16 @@ def ask_question_standard(question):
     Only use commands like this if I tell you to do so. nd your sentence with #lamp-1 for on and #lamp-0 for off. 
     Response in less than 80 words. 
     """ + date_and_time
-    response = client.chat.completions.create(
+assistant = client.beta.assistants.create(
     model="gpt-3.5-turbo-0125",
-    messages=[
-        {"role": "system", "content": context},
-        {"role": "user", "content": question}
-        
-    ]
-    )
-    return response.choices[0].message.content
+    name="Jarvis",
+    instructions=context,
+)
 
-# Try this if you want Jarvis to remember the conversation
+# Create empty thread for conversation
+thread = client.beta.threads.create()
+
+# Create function for conversation with memory
 def ask_question_memory(question):
     global thread
     global thread_message
@@ -50,7 +48,7 @@ def ask_question_memory(question):
         role="user",
         content=question,
         )
-    # Create a run for the thread
+    # Create a run for the thread using the defined assistant
     run = client.beta.threads.runs.create(
       thread_id=thread.id,
       assistant_id=assistant.id,
@@ -77,7 +75,6 @@ def play_sound(file_path):
     mixer.music.load(file_path)
     mixer.music.play()
     
-    
 # Function to generate TTS for each sentence and play them
 def TTS(text):
     speech_file_path = Path(f"speech.mp3")
@@ -86,7 +83,7 @@ def TTS(text):
     while mixer.music.get_busy():  # Wait for the mixer to finish
         time.sleep(1)
     mixer.music.unload()
-    #delete the file after playing
+    # Delete the file after playing
     os.remove(speech_file_path)
 
     return "done"
