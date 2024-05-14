@@ -4,45 +4,77 @@ from pathlib import Path
 from pygame import mixer
 import time
 import os
-from dotenv import load_dotenv, find_dotenv
+from dotenv import find_dotenv, load_dotenv, set_key
 
 # Load .env file
-load_dotenv()
+dotenv_path = find_dotenv()
+if not dotenv_path:
+    print("Error: .env file not found")
+    exit(1)
+load_dotenv(dotenv_path,override=True)
 
 # Access the API key
 OpenAI.api_key = os.getenv("OPENAI_API_KEY")
-
-tts_enabled = True
+openai_assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
+openai_thread_id = os.getenv("OPENAI_THREAD_ID")
 
 # Initialize the client
 client = OpenAI()
 mixer.init()
 
-# Create the assistant
-date_and_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-context = """
-    You are an assistant named Jarvis like from the ironman movies. 
-    You are to act like him and provide help as best you can.  
-    Be funny and witty. Keep it brief and serious. 
-    Be a little sassy in your responses. 
-    You have a variety of smart devices to control. 
-    You can control them by ending your sentence with #light1-off like this. 
-    Only use commands like this if I tell you to do so. nd your sentence with #lamp-1 for on and #lamp-0 for off. 
-    Response in less than 80 words. 
-    """ + date_and_time
-assistant = client.beta.assistants.create(
-    model="gpt-3.5-turbo-0125",
-    name="Jarvis",
-    instructions=context,
-)
+def create_or_update_assistant_thread(openai_assistant_id, openai_thread_id):
+    global assistant
+    global thread
+    name = "Jarvis"
+    model = "gpt-3.5-turbo-0125"
+    date_and_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    context = """
+        You are an assistant named Jarvis like from the ironman movies. 
+        You are to act like him and provide help as best you can.  
+        Be funny and witty. Keep it brief and serious. 
+        Be a little sassy in your responses. 
+        You have a variety of smart devices to control. 
+        You can control them by ending your sentence with #light1-off like this. 
+        Only use commands like this if I tell you to do so. End your sentence with #lamp-1 for on and #lamp-0 for off. 
+        If I tell you you have a preference, remember it. Embrace it. Make it a part of you.
+        Response in less than 80 words. 
+        """ + date_and_time
+    if not openai_assistant_id:
+        assistant = client.beta.assistants.create(
+            model=model,
+            name=name,
+            instructions=context,
+        )
+        openai_assistant_id = assistant.id
+        set_key(dotenv_path, "OPENAI_ASSISTANT_ID", openai_assistant_id)
+        print(f"Created new assistant with ID: {openai_assistant_id}")
+    else:
+        assistant = client.beta.assistants.update(
+            assistant_id=openai_assistant_id,
+            model=model,
+            name=name,
+            instructions=context,
+        )
+        print(f"Updated existing assistant with ID: {openai_assistant_id}")
+    if not openai_thread_id:
+        thread = client.beta.threads.create()
+        openai_thread_id = thread.id
+        set_key(dotenv_path, "OPENAI_THREAD_ID", openai_thread_id)
+        print(f"Created new thread with ID: {openai_thread_id}")
+    else:
+        thread = client.beta.threads.retrieve(
+            thread_id=openai_thread_id
+        )
+        print(f"Using existing thread with ID: {openai_thread_id}")
+    return assistant, thread
 
-# Create empty thread for conversation
-thread = client.beta.threads.create()
-
-# Create function for conversation with memory
+# Function for conversation with memory
 def ask_question_memory(question):
+    global assistant
     global thread
     global thread_message
+    # Create or update the assistant and thread
+    create_or_update_assistant_thread(openai_assistant_id, openai_thread_id)
     thread_message = client.beta.threads.messages.create(
         thread.id,
         role="user",
