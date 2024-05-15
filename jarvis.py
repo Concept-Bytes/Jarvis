@@ -24,9 +24,11 @@ def main():
     recorder.energy_threshold = 1000
     # Definitely do this, dynamic energy compensation lowers the energy threshold dramatically to a point where the SpeechRecognizer never stops recording.
     recorder.dynamic_energy_threshold = False
+
+    index = int(os.getenv('DEVICE_INDEX', '1'))
     
     #set the mic source
-    source = sr.Microphone(sample_rate=16000, device_index=os.getenv('DEVICE_INDEX', '1'))
+    source = sr.Microphone(sample_rate=16000, device_index=index)
 
     audio_model = whisper.load_model("tiny.en")
     print("Model loaded.\n")
