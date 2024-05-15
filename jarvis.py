@@ -3,7 +3,7 @@ import io
 import speech_recognition as sr
 import whisper
 import torch
-import assist 
+import assist
 import tools
 from datetime import datetime, timedelta
 from queue import Queue
@@ -20,16 +20,15 @@ def main():
     data_queue = Queue()
     # We use SpeechRecognizer to record our audio because it has a nice feature where it can detect when speech ends.
     recorder = sr.Recognizer()
-    recorder.energy_threshold = 2000
+    recorder.energy_threshold = 3000
     # Definitely do this, dynamic energy compensation lowers the energy threshold dramatically to a point where the SpeechRecognizer never stops recording.
     recorder.dynamic_energy_threshold = False
     
-    #set the mic source
+    # Set the mic source
     source = sr.Microphone(sample_rate=16000, device_index=1)
 
     audio_model = whisper.load_model("tiny.en")
     print("Model loaded.\n")
-
     
     with source:
         recorder.adjust_for_ambient_noise(source)
@@ -43,9 +42,9 @@ def main():
         data = audio.get_raw_data()
         data_queue.put(data)
 
-    #How real time the recording is in seconds.
-    record_timeout = 2
-    #How much empty space between recordings before we consider it a new line in the transcription.
+    # How real time the recording is in seconds.
+    record_timeout = 10
+    # How much empty space between recordings before we consider it a new line in the transcription.
     phrase_timeout = 3
     # Create a background thread that will pass us raw audio bytes.
     # We could do this manually but SpeechRecognizer provides a nice helper.
@@ -94,17 +93,17 @@ def main():
             if phrase_complete:
                 transcription.append(text)
                 
-                #check if line contains any words from hot_words
+                # Check if line contains any words from hot_words
                 print("checking")
                 if any(hot_word in text.lower() for hot_word in hot_words):
-                    #make sure text is not empty
+                    # Make sure text is not empty
                     if text:
                         print("User: " + text)
                         print("ASKING AI")
                         response = assist.ask_question_memory(text)
                         print("AI: " + response)
                         speech = response.split("#")[0]
-                        #check if there is a command
+                        # Check if there is a command
                         if len(response.split("#")) > 1:
                             command = response.split("#")[1]
                             tools.parse_command(command)
