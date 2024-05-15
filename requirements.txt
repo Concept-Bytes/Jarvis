@@ -5,3 +5,4 @@ SpeechRecognition
 torch
 git+https://github.com/openai/whisper.git
 openai
+python-dotenv
