@@ -10,6 +10,9 @@ from queue import Queue
 from tempfile import NamedTemporaryFile
 import time
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def main():
     
