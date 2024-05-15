@@ -4,6 +4,7 @@ from pathlib import Path
 from pygame import mixer
 import time
 import os
+from db import insert_conversation
 from dotenv import find_dotenv, load_dotenv, set_key
 
 # Load .env file
@@ -100,7 +101,10 @@ def ask_question_memory(question):
     messages = client.beta.threads.messages.list(
       thread_id=thread.id
     )
-    return messages.data[0].content[0].text.value
+    response = messages.data[0].content[0].text.value
+    # Insert the conversation into the database
+    insert_conversation(question, response)
+    return response
 
 # Function to ask a question to the assistant with an image
 def play_sound(file_path):
@@ -120,7 +124,6 @@ def TTS(text):
 
     return "done"
             
-
 # Function to generate TTS and return the file path
 def generate_tts(sentence, speech_file_path):
     
