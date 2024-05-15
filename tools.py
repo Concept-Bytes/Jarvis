@@ -6,11 +6,11 @@
 def parse_command(command):
     if command == "print":
         print("Hello World!")
-    elif command == "light_on":
+    elif command == "light1-on":
         print("Turning on the light")
-    elif command == "light_off":
+    elif command == "light1-off":
         print("Turning off the light")
-    elif command == "exit":
+    elif command == "exit-program":
         print("Exiting program")
         exit()
     else:

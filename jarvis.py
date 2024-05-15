@@ -5,12 +5,15 @@ import whisper
 import torch
 import assist
 import tools
+from db import init_db
 from datetime import datetime, timedelta
 from queue import Queue
 from tempfile import NamedTemporaryFile
 import time
 
 def main():
+
+    init_db()
     
     # The last time a recording was retrieved from the queue.
     phrase_time = None
