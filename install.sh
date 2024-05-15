@@ -12,7 +12,7 @@ sudo apt-get update
 sudo apt-get upgrade -y
 
 # Install Python3, pip, virtualenv, and git
-sudo apt-get install -y python3 python3-pip python3-venv git portaudio19-dev
+sudo apt-get install -y python3 python3-pip python3-venv git portaudio19-dev ffmpeg
 
 # Ensure the installation directory exists
 sudo mkdir -p $INSTALL_DIR
