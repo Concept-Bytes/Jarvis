@@ -25,7 +25,7 @@ def main():
     recorder.dynamic_energy_threshold = False
     
     #set the mic source
-    source = sr.Microphone(sample_rate=16000, os.getenv('DEVICE_INDEX', '1'))
+    source = sr.Microphone(sample_rate=16000, device_index=os.getenv('DEVICE_INDEX', '1'))
 
     audio_model = whisper.load_model("tiny.en")
     print("Model loaded.\n")
