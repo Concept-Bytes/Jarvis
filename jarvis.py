@@ -10,9 +10,10 @@ from datetime import datetime, timedelta
 from queue import Queue
 from tempfile import NamedTemporaryFile
 import time
+import asyncio
 
-def main():
-
+async def main():
+    await tools.init_smart_plug()
     init_db()
     
     # The last time a recording was retrieved from the queue.
@@ -109,7 +110,7 @@ def main():
                         # Check if there is a command
                         if len(response.split("#")) > 1:
                             command = response.split("#")[1]
-                            tools.parse_command(command)
+                            await tools.parse_command(command)
                         if tts_enabled:
                             done = assist.TTS(speech)
                             print(done)
@@ -121,9 +122,9 @@ def main():
             print('', end='', flush=True)
 
             # Infinite loops are bad for processors, must sleep.
-            time.sleep(0.25)
+            await asyncio.sleep(0.25)
         
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
