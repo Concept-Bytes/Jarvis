@@ -11,8 +11,8 @@ mp_hands = mp.solutions.hands
 
 hands = mp_hands.Hands(static_image_mode=False,
                        max_num_hands=2,
-                       min_detection_confidence=0.1,
-                       min_tracking_confidence=0.1)
+                       min_detection_confidence=0.05,
+                       min_tracking_confidence=0.05)
 
 mp_drawing = mp.solutions.drawing_utils
 
@@ -30,6 +30,7 @@ if not cap.isOpened():
 screen_width, screen_height = pag.size()
 
 mouseDown = False
+mouseClick = False
 
 #Main loop
 while True:
@@ -66,11 +67,19 @@ while True:
             # Get the distance between the thumb and index finger
             distance = np.sqrt((index_finger_tip.x - thumb_tip.x)**2 + (index_finger_tip.y - thumb_tip.y)**2)
 
+            # Click only
+            # if distance < 0.1 and not mouseClick:
+            #     # Mouse click
+            #     pag.click()
+            #     mouseClick = True
+            # elif distance > 0.2:
+            #     mouseClick = False
+
             if distance < 0.1 and mouseDown == False:
                 #mouse down
                 pag.mouseDown()
                 mouseDown = True
-            if distance > 0.3 and mouseDown == True:
+            if distance >= 0.1 and mouseDown == True:
                 #mouse up
                 pag.mouseUp()
                 mouseDown = False
