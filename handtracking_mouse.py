@@ -75,14 +75,14 @@ while True:
             # elif distance > 0.2:
             #     mouseClick = False
 
-            # if distance < 0.1 and mouseDown == False:
-            #     #mouse down
-            #     pag.mouseDown()
-            #     mouseDown = True
-            # if distance >= 0.1 and mouseDown == True:
-            #     #mouse up
-            #     pag.mouseUp()
-            #     mouseDown = False
+            if distance < 0.1 and mouseDown == False:
+                #mouse down
+                pag.mouseDown()
+                mouseDown = True
+            if distance >= 0.1 and mouseDown == True:
+                #mouse up
+                pag.mouseUp()
+                mouseDown = False
             
             if mouseDown:
                 #draw a circle at the midpoint with radius 10 (# of pixels )
