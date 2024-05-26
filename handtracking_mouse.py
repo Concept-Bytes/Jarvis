@@ -17,7 +17,7 @@ hands = mp_hands.Hands(static_image_mode=False,
 mp_drawing = mp.solutions.drawing_utils
 
 #open the camera
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 
 # error check to make sure the camera is open
