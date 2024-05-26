@@ -47,7 +47,7 @@ async def main():
         data_queue.put(data)
 
     # How real time the recording is in seconds.
-    record_timeout = 10
+    record_timeout = 15
     # How much empty space between recordings before we consider it a new line in the transcription.
     phrase_timeout = 3
     # Create a background thread that will pass us raw audio bytes.
@@ -60,8 +60,13 @@ async def main():
     # Cue the user that we're ready to go.
     print("main loop starting")
     
+    # Define cues to initiate AI assitant listening
     hot_words = ["jarvis"]
+    # Define cues to keep AI assistant listening
+    convo_words = ["?"]
     tts_enabled = True
+    continue_listening = False
+
     while True:
         now = datetime.utcnow()
         # Pull raw recorded audio from the queue.
@@ -99,13 +104,18 @@ async def main():
                 
                 # Check if line contains any words from hot_words
                 print("checking")
-                if any(hot_word in text.lower() for hot_word in hot_words):
+                if any(hot_word in text.lower() for hot_word in hot_words) or continue_listening:
                     # Make sure text is not empty
                     if text:
                         print("User: " + text)
                         print("ASKING AI")
                         response = assist.ask_question_memory(text)
                         print("AI: " + response)
+                        if any(convo_word in response for convo_word in convo_words):
+                            continue_listening = True
+                            print("AI asked a question, continue listening")
+                        else:
+                            continue_listening = False
                         speech = response.split("#")[0]
                         # Check if there is a command
                         if len(response.split("#")) > 1:
