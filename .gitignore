@@ -12,6 +12,9 @@ thumbs.db
 venv
 .env
 
-#AI-Assistant
+# AI-Assistant
 speech.mp3
 jarvis.db
+
+# Holomat
+scans/
