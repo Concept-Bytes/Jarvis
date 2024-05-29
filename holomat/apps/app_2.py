@@ -76,7 +76,7 @@ def perform_depth_estimation(image):
 
 def save_images(depth_map):
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    depth_map_path = f'./scans/depth_map_{timestamp}.png'
+    depth_map_path = f'holomat/scans/depth_map_{timestamp}.png'
     cv2.imwrite(depth_map_path, depth_map)
     print(f"Saved depth map as {depth_map_path}")
 
@@ -115,7 +115,7 @@ def run(screen, camera_manager):
                 depth_image = None  # Clear the previous depth map
 
                 # Play start sound
-                play_sound('audio/drawing.wav')
+                play_sound('holomat/audio/drawing.wav')
 
                 # Run scanning animation
                 for y in range(0, SCREEN_SIZE[1], 20):
@@ -129,7 +129,7 @@ def run(screen, camera_manager):
                 pygame.display.flip()
 
                 # Play end sound
-                play_sound('audio/quick_click.wav')
+                play_sound('holomat/audio/quick_click.wav')
 
                 # Capture an image from the camera
                 ret, frame = camera_manager.cap.read()
@@ -186,5 +186,5 @@ if __name__ == '__main__':
 
     screen = pygame.display.set_mode(SCREEN_SIZE)
     pygame.display.set_caption('Depth Estimation App')
-    camera_manager = CameraManager('./M.npy', WIDTH, HEIGHT)
+    camera_manager = CameraManager('holomat/M.npy', WIDTH, HEIGHT)
     run(screen, camera_manager)

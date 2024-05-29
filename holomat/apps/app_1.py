@@ -80,17 +80,17 @@ def run(screen, camera_manager):
                 if distance_between_fingers < 50:  # Threshold for starting a pinch
                     pygame.draw.circle(screen, WHITE, mid_point, 10)
                     if not drawing:
-                        play_sound('audio/quick_click.wav')
+                        play_sound('holomat/audio/quick_click.wav')
                         start_point = mid_point
                         drawing = True
                         pinch_start_time = time.time()
-                        play_sound('audio/drawing.wav')
+                        play_sound('holomat/audio/drawing.wav')
                     else:
                         end_point = mid_point
                 else:
                     if drawing and (distance_between_fingers > PINCH_RELEASE_DISTANCE or (time.time() - pinch_start_time) > PINCH_HOLD_TIME):
                         if start_point and end_point:
-                            play_sound('audio/quick_click.wav')
+                            play_sound('holomat/audio/quick_click.wav')
                             permanent_lines.append((start_point, end_point))
                         drawing = False
 
@@ -103,7 +103,7 @@ def run(screen, camera_manager):
         # Check if the cursor touches the home button or the clear button
         if index_pos and distance(index_pos, home_button_center) <= home_button_radius:
             running = False
-            play_sound('audio/back.wav')
+            play_sound('holomat/audio/back.wav')
         elif index_pos and clear_button_rect.collidepoint(index_pos):
             permanent_lines = []
 
@@ -128,5 +128,5 @@ def run(screen, camera_manager):
 if __name__ == '__main__':
     screen = pygame.display.set_mode(SCREEN_SIZE)
     pygame.display.set_caption('Drawing App')
-    camera_manager = CameraManager('./M.npy', WIDTH, HEIGHT)
+    camera_manager = CameraManager('holomat/M.npy', WIDTH, HEIGHT)
     run(screen, camera_manager)

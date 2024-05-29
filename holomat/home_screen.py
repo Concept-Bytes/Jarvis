@@ -65,7 +65,7 @@ class AppCircle:
         Load an image for the circle if it is not the main circle.
         """
         if not self.is_main:
-            image_path = f'./resources/app_{self.app_index}.jpg'
+            image_path = f'holomat/resources/app_{self.app_index}.jpg'
             if os.path.exists(image_path):
                 image = pygame.image.load(image_path)
                 return pygame.transform.scale(image, (2 * self.radius, 2 * self.radius))
@@ -170,7 +170,7 @@ def run_home_screen(screen, camera_manager):
     last_app_select_time = 0
 
     index_finger_pos = None
-    play_sound("./audio/startup.wav")
+    play_sound("holomat/audio/startup.wav")
     while running:
         if not camera_manager.update():
             continue
@@ -200,7 +200,7 @@ def run_home_screen(screen, camera_manager):
                         circle.is_hovered_flag = True
                         if circle.is_main:
                             print("Main circle hovered")
-                            play_sound("./audio/home.wav")
+                            play_sound("holomat/audio/home.wav")
                             if time.time() - last_toggle_time > HOME_TOGGLE_DELAY:
                                 apps_visible = not apps_visible
                                 print(f"Toggling apps visibility to: {apps_visible}")
@@ -218,12 +218,12 @@ def run_home_screen(screen, camera_manager):
                                     app = f'app_{circle.app_index}'
                                     print(f"Launching app: {app}")
                                     mod = __import__(f'apps.{app}', fromlist=[''])
-                                    play_sound("./audio/confirmation.wav")
+                                    play_sound("holomat/audio/confirmation.wav")
                                     mod.run(screen, camera_manager)  # Pass camera_manager to the app
                                     last_app_select_time = time.time()
                                 except ModuleNotFoundError:
                                     print(f"Module 'apps.{app}' not found.")
-                                    play_sound("./audio/reject.wav")
+                                    play_sound("holomat/audio/reject.wav")
                     else:
                         circle.hover_time = time.time() if circle.visible else 0
 
@@ -240,5 +240,5 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
     pygame.display.set_caption('Home Screen')
     # Initialize the CameraManager with the transformation matrix and screen dimensions
-    camera_manager = CameraManager('./M.npy')
+    camera_manager = CameraManager('holomat/M.npy')
     run_home_screen(screen, camera_manager)

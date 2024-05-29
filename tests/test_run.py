@@ -14,7 +14,7 @@ mp_drawing = mp.solutions.drawing_utils
 cap = cv2.VideoCapture(1)
 
 # Read in M matrices
-M = np.load("M.npy")
+M = np.load("holomat/M.npy")
 
 width, height = 1920, 1080
 

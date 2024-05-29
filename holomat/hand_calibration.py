@@ -85,7 +85,7 @@ if len(calibration_points) == 4:
     # Calculate the homography matrix
     M, _ = cv2.findHomography(calibration_points_np, target_points_np)
     # Save the homography matrix to a file for reference in other functions
-    np.save("M.npy", M)
+    np.save("holomat\M.npy", M)
     print("Calibration successful. M matrix saved.")
 else:
     print("Error: Not all calibration points were captured.")

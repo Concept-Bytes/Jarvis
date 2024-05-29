@@ -10,7 +10,7 @@ class CameraManager:
         Uses OpenCV to capture frames for hand tracking.
         
         Parameters:
-        - transformation_matrix_path: Path to the transformation matrix file (M.npy)
+        - transformation_matrix_path: Path to the transformation matrix file (holomat/M.npy)
         """
         # Get display settings
         display = DisplayManager()

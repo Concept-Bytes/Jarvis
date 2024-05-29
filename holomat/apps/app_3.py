@@ -44,13 +44,13 @@ def run(screen, camera_manager):
                 index_pos = (int(hand_landmarks[8][0]), int(hand_landmarks[8][1]))  # INDEX_FINGER_TIP
 
                 if (index_pos[0] - increase_button_center[0])**2 + (index_pos[1] - increase_button_center[1])**2 <= circle_radius**2:
-                    play_sound('audio/quick_click.wav')
+                    play_sound('holomat/audio/quick_click.wav')
                     count += 1
                 elif (index_pos[0] - reset_button_center[0])**2 + (index_pos[1] - reset_button_center[1])**2 <= circle_radius**2:
-                    play_sound('audio/confirmation.wav')
+                    play_sound('holomat/audio/confirmation.wav')
                     count = 0
                 elif (index_pos[0] - home_button_center[0])**2 + (index_pos[1] - home_button_center[1])**2 <= circle_radius**2:
-                    play_sound('audio/back.wav')
+                    play_sound('holomat/audio/back.wav')
                     running = False
 
         screen.fill(BLACK)
@@ -88,5 +88,5 @@ if __name__ == '__main__':
     # from camera_manager import CameraManager  # Assuming CameraManager is in the parent directory
     screen = pygame.display.set_mode(SCREEN_SIZE)
     pygame.display.set_caption('Click Counter App')
-    camera_manager = CameraManager('./M.npy', WIDTH, HEIGHT)
+    camera_manager = CameraManager('holomat/M.npy', WIDTH, HEIGHT)
     run(screen, camera_manager)
