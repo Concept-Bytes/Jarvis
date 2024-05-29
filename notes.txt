@@ -1,4 +1,0 @@
-to do
-- sqlite for convo history back up and reference with vector search
-- talk to Jarvis without having to reference his name, e.g. keep convo going if he asks a question
-- only update assistant when theres changes or variable is set to true

@@ -1,0 +1,14 @@
+### to do
+- sqlite for convo history back up and reference with vector search
+- talk to Jarvis without having to reference his name, e.g. keep convo going if he asks a question
+- only update assistant when theres changes or variable is set to true
+
+### original requirements.txt
+pyaudio
+SpeechRecognition
+--extra-index-url https://download.pytorch.org/whl/cu116
+torch
+git+https://github.com/openai/whisper.git
+openai
+pygame
+python-dotenv
