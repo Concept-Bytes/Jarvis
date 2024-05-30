@@ -51,14 +51,20 @@ async def main():
     # How much empty space between recordings before we consider it a new line in the transcription.
     phrase_timeout = 3
     # Create a background thread that will pass us raw audio bytes.
-    # We could do this manually but SpeechRecognizer provides a nice helper.
-    recorder.listen_in_background(source, record_callback, phrase_time_limit=record_timeout)
+    # This enables the microphone to listen, comes from SpeechRecognizer package
+    def is_listening(is_speaking):
+        global start_listening
+        if not is_speaking:
+            start_listening = recorder.listen_in_background(source, record_callback, phrase_time_limit=record_timeout)
+        else:
+            start_listening(wait_for_stop=False)
 
     temp_file = NamedTemporaryFile().name
     transcription = ['']
     
     # Cue the user that we're ready to go.
     print("main loop starting")
+    is_listening(False)
     
     # Define cues to initiate AI assitant listening
     hot_words = ["jarvis"]
@@ -121,9 +127,12 @@ async def main():
                         if len(response.split("#")) > 1:
                             command = response.split("#")[1]
                             await tools.parse_command(command)
+                        # This enables the response from the assistant to be spoken aloud
                         if tts_enabled:
+                            is_listening(True)
                             done = assist.TTS(speech)
                             print(done)
+                            is_listening(False)
                 
                 else:
                     print("Listening...")
