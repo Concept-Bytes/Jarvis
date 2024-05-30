@@ -84,8 +84,7 @@ def run(screen, camera_manager):
         # pygame.display.flip()
         pygame.time.delay(50)
 
-if __name__ == '__main__':
-    # from camera_manager import CameraManager  # Assuming CameraManager is in the parent directory
+def main():
     screen = pygame.display.set_mode(SCREEN_SIZE)
     pygame.display.set_caption('Click Counter App')
     camera_manager = CameraManager('holomat/M.npy', WIDTH, HEIGHT)
