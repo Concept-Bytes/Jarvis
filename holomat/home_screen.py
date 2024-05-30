@@ -235,7 +235,7 @@ def run_home_screen(screen, camera_manager):
         pygame.display.flip()
         pygame.time.delay(50)
 
-if __name__ == '__main__':
+def main():
     # Set the display mode
     screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
     pygame.display.set_caption('Home Screen')

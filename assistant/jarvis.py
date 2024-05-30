@@ -133,8 +133,3 @@ async def main():
 
             # Infinite loops are bad for processors, must sleep.
             await asyncio.sleep(0.25)
-        
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
