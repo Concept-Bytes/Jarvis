@@ -1,4 +1,6 @@
 pyaudio
+realtimestt
+pygame
 SpeechRecognition
 --extra-index-url https://download.pytorch.org/whl/cu116
 torch
