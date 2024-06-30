@@ -1,5 +1,6 @@
 from RealtimeSTT import AudioToTextRecorder
 import assist
+import time
 import tools
 
 if __name__ == '__main__':
@@ -15,11 +16,14 @@ if __name__ == '__main__':
                     if current_text:
                         print("User: " + current_text)
                         recorder.stop()
+                        #get time
+                        current_text = current_text + " " + time.strftime("%Y-m-%d %H-%M-%S")
                         response = assist.ask_question_memory(current_text)
                         print(response)
-                        done = assist.TTS(response)
-                        recorder.start()
+                        speech = response.split('#')[0]
+                        done = assist.TTS(speech)
                         skip_hot_word_check = True if "?" in response else False
                         if len(response.split('#')) > 1:
                             command = response.split('#')[1]
                             tools.parse_command(command)
+                        recorder.start()
