@@ -33,16 +33,20 @@ Speak to Jarvis: Begin speaking to the system. Use the hotwords like "Hey Jarvis
 
 ## Command Line Arguments
 --model: Specify the Whisper model size (default: tiny). Options are tiny, base, small, medium, large.
+
 --non_english: Use a non-English model if required.
+
 --energy_threshold: Set the microphone energy threshold for detecting speech.
+
 --record_timeout: Duration in seconds for how real-time the recording is.
+
 --phrase_timeout: Duration in seconds for the silence interval to detect the end of a phrase.
 
 ## Configuration
 Modify the script's hot_words list to customize the trigger words according to your preference.
 Tweak the energy_threshold, record_timeout, and phrase_timeout settings to optimize speech detection based on your environment.
 
-##Notes
+## Notes
 Ensure that your API keys and model access privileges are correctly configured before running the script.
 The quality of TTS output and the responsiveness of the assistant depend on the selected models and system performance.
 
