@@ -1,5 +1,26 @@
-pyaudio
-SpeechRecognition
---extra-index-url https://download.pytorch.org/whl/cu116
-torch
-git+https://github.com/openai/whisper.git
+# ── Core ────────────────────────────────────────────────
+flask>=3.0.0
+anthropic>=0.34.0
+
+# ── Tools ───────────────────────────────────────────────
+python-weather
+spotipy
+icrawler
+
+# ── Audio (NOT needed for web/tablet interface — browser handles TTS/STT) ──
+# These only apply to the CLI jarvis.py voice mode and require native libs.
+# On Termux, install these manually ONLY if you need CLI mode:
+#   pkg install portaudio && pip install pyaudio
+#   pip install pygame edge-tts SpeechRecognition
+# pygame
+# pyaudio
+# SpeechRecognition
+# edge-tts
+
+# ── Optional: local LLM via Ollama ──────────────────────
+# ollama
+
+# ── Optional: Whisper hotword detection (heavy, needs GPU) ──
+# torch  →  pip install torch --index-url https://download.pytorch.org/whl/cu116
+# RealtimeSTT
+# git+https://github.com/openai/whisper.git

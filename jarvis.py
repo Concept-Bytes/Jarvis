@@ -1,5 +1,5 @@
 from RealtimeSTT import AudioToTextRecorder
-import assist
+import claude_assist as assist  # swap to Claude; revert to `import assist` for OpenAI
 import time
 import tools
 

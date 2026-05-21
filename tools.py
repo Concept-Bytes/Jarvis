@@ -1,54 +1,64 @@
 import python_weather
 import asyncio
-import assist
-from icrawler.builtin import GoogleImageCrawler
 import os
-import spot
-
-async def get_weather(city_name):
-    async with python_weather.Client(unit=python_weather.IMPERIAL) as client:
-        weather = await client.get(city_name)
-        return weather
-
-def search(query):
-    google_Crawler = GoogleImageCrawler(storage = {"root_dir": r'./images'})
-    google_Crawler.crawl(keyword = query, max_num = 1)
 
 
-def parse_command(command):
-    if "weather" in command:
-        weather_description = asyncio.run(get_weather("Chicago"))
-        query = "System information: " + str(weather_description)
-        print(query)
-        response = assist.ask_question_memory(query)
-        done = assist.TTS(response)
+async def _fetch_weather(city):
+    async with python_weather.Client(unit=python_weather.IMPERIAL) as c:
+        return await c.get(city)
 
-    if "search" in command:
-        files = os.listdir("./images")
-        [os.remove(os.path.join("./images", f))for f in files]
-        query = command.split("-")[1]
-        search(query)
-    
-    if "play" in command:
-        spot.start_music()
 
-    if "pause" in command:
-        spot.stop_music()
-    
-    if "skip" in command:
-        spot.skip_to_next()
-    
-    if "previous" in command:
-        spot.skip_to_previous()
-    
-    if "spotify" in command:
-        spotify_info = spot.get_current_playing_info()
-        query = "System information: " + str(spotify_info)
-        print(query)
-        response = assist.ask_question_memory(query)
-        done = assist.TTS(response)
-        
+def get_weather(city="Chicago"):
+    return str(asyncio.run(_fetch_weather(city)))
 
-    
 
-        
+def search_images(query):
+    from icrawler.builtin import GoogleImageCrawler
+    os.makedirs("./images", exist_ok=True)
+    for f in os.listdir("./images"):
+        try:
+            os.remove(os.path.join("./images", f))
+        except OSError:
+            pass
+    crawler = GoogleImageCrawler(storage={"root_dir": "./images"})
+    crawler.crawl(keyword=query, max_num=1)
+
+
+def parse_command(command: str) -> dict:
+    result = {}
+    cmd = command.lower().strip()
+
+    if "weather" in cmd:
+        try:
+            result["weather"] = get_weather()
+        except Exception as e:
+            result["weather_error"] = str(e)
+
+    if "search" in cmd:
+        query = cmd.split("-", 1)[1].strip() if "-" in cmd else cmd.replace("search", "").strip()
+        try:
+            search_images(query)
+            result["search"] = f"Searched for: {query}"
+        except Exception as e:
+            result["search_error"] = str(e)
+
+    for action in ("play", "pause", "skip", "previous", "spotify"):
+        if action in cmd:
+            try:
+                import spot
+                if action == "play":
+                    spot.start_music()
+                elif action == "pause":
+                    spot.stop_music()
+                elif action == "skip":
+                    spot.skip_to_next()
+                elif action == "previous":
+                    spot.skip_to_previous()
+                elif action == "spotify":
+                    result["spotify"] = str(spot.get_current_playing_info())
+                if action != "spotify":
+                    result[action] = True
+            except Exception as e:
+                result[f"{action}_error"] = str(e)
+
+    return result

@@ -1,0 +1,18 @@
+{
+  "name": "Jarvis — Claude Assistant",
+  "short_name": "Jarvis",
+  "description": "A dedicated Claude AI assistant for your tablet",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050508",
+  "theme_color": "#050508",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/static/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
